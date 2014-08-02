@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RCC version="1.0">
+  <qresource>
+    <!--
+    <file alias="fishImg.png">images/fish.png</file>
+    <file alias="coverImg.png">images/cover.png</file>
+    <file alias="searchImg.png">images/search.png</file> -->
+    <!--
+            List files that you want to include into resources like this:
+            <file>images/copy.png</file>
+    -->
+  </qresource>
+</RCC>
