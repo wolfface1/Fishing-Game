@@ -5,8 +5,8 @@
  * Created on 15 April 2014, 22:36
  */
 
-#ifndef _MAINWINDOW_Hupdate
-#define	_MAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include "ui_MainWindow.h"
 #include "GameLog.h"
