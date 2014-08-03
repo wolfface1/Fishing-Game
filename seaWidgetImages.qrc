@@ -4,7 +4,8 @@
     <!--
     <file alias="fishImg.png">images/fish.png</file>
     <file alias="coverImg.png">images/cover.png</file>
-    <file alias="searchImg.png">images/search.png</file> -->
+    <file alias="cursorImg.png">images/cursor.png</file>
+    -->
     <!--
             List files that you want to include into resources like this:
             <file>images/copy.png</file>
