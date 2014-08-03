@@ -97,23 +97,19 @@ void seaWidget::resizeEvent(QResizeEvent *event){
 }
 
 void seaWidget::cellClicked(int x, int y){
-  setCovered(x, y, false); //set the uncovered bit
-  update();
-  
-  emit cellHit(x, y);
-  //qDebug() << "Cell, x:" << x << "y:" << y << "clicked.";
-}
-
-void seaWidget::checkCell(int x, int y){
-  char c = table.returnByte(x, y);
+  quint8 c = table.returnByte(x, y);
   
   if ((c & covered) == covered){
-    return;
-  }
-  
-  if ((c & fish) == fish){
-    emit fishFound();
-  }
+    setCovered(x, y, false); //set the uncovered bit
+    
+    if ((c & fish) == fish){
+      emit fishFound();
+    }
+    
+    update();
+    emit cellHit(x, y);
+  }  
+  //qDebug() << "Cell, x:" << x << "y:" << y << "clicked.";
 }
 
 QString seaWidget::printBinary(quint8 byte){
