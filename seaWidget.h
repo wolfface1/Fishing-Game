@@ -42,6 +42,9 @@ class seaWidget : public QWidget {
     QPixmap drawImage(quint8 code);
     void cellClicked(int x, int y);
     void checkCell(int x, int y);  //checks the cell and changes the stats.
+    QPixmap TileImg;
+    QPixmap FishImg;
+    QPixmap NothingImg;
     
     byteTable table;
     int Cwidth; int Cheight;

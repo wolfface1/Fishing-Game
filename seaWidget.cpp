@@ -5,6 +5,9 @@
 seaWidget::seaWidget(QWidget* parent, int columns, int rows): QWidget(parent){
   table.reDim(columns, rows);
   table.setBytetoAll(covered);
+  TileImg = QPixmap(":images/seaTile.bmp");
+  FishImg = QPixmap(":images/fishFound.png");
+  NothingImg = QPixmap(":/images/NothingFound.png");
 }
 
 
@@ -85,6 +88,10 @@ void seaWidget::resizeEvent(QResizeEvent *event){
   Cwidth = width() / table.columns();
   Cheight = height() / table.rows();
   
+  TileImg = TileImg.scaled(Cwidth, Cheight);
+  FishImg = FishImg.scaled(Cwidth, Cheight, Qt::KeepAspectRatio);
+  NothingImg = NothingImg.scaled(Cwidth, Cheight, Qt::KeepAspectRatio);
+  
   repaint();
   qDebug() << "resized Cell width:" << width() << ", Cell Height:" << height(); 
 }
@@ -125,22 +132,26 @@ QString seaWidget::printBinary(quint8 byte){
 
 QPixmap seaWidget::drawImage(quint8 code){
   QPixmap pMap(Cwidth, Cheight);
-  
   QPainter p(&pMap);
+  //QRect cellDim(0, 0, Cwidth, Cheight);
+  
   
   p.setPen(Qt::gray);
   p.setBrush(QBrush(Qt::cyan));
   p.drawRect(pMap.rect());
   
   p.setPen(Qt::black);
+  p.drawPixmap(0, 0, TileImg);
   
   if ((code & covered) == covered){
-    p.drawText(Cwidth / 2, Cheight / 2, "c");
+    //leave the tile as is 
+    //p.drawText(Cwidth / 2, Cheight / 2, "c");
   }else{
     if (((code & fish) == fish)){
-      p.drawText(Cwidth / 2, Cheight / 2, "f");
+      //p.drawText(Cwidth / 2, Cheight / 2, "f");
+      p.drawPixmap(0, 0, FishImg);
     }else{
-      p.drawText(Cwidth / 2, Cheight / 2, "n");
+      p.drawPixmap(0, 0, NothingImg);
     }
   }
   p.end();

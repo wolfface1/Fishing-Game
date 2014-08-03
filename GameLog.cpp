@@ -73,11 +73,6 @@ void GameLog::SaveLogFile(QString LogfilePath){
   QFile file(LogfilePath);
   LogItem item;
   
-  if (Log.empty()){
-    emit logText("GameLog: Log contains no log data, cannot save Log");
-    return;
-  }
-  
   if (!file.open(QFile::WriteOnly)){
     emit logText("GameLog: unable to open log file for writing");
     return;

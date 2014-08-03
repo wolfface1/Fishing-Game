@@ -14,7 +14,7 @@ ADD_DEFINITIONS(${QT_DEFINITIONS})
 set(UIS MainWindow.ui)
 set(FishingGame_SRCS main.cpp MainWindow.cpp GameLog.cpp LogItem.cpp byteTable.cpp seaWidget.cpp)
 set(HEADERS MainWindow.h GameLog.h LogItem.h byteTable.h seaWidget.h)
-#set(RESOURCES seaWidgetImages.qrc)
+set(RESOURCES seaWidgetImages.qrc)
 
 QT4_WRAP_CPP(HEADERS_MOC ${HEADERS})
 QT4_WRAP_UI(UIHEADERS ${UIS})
