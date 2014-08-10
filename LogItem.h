@@ -13,13 +13,20 @@
  * Null : type = 0
  * Error : type = 1
  * Click : type = 2
- * 
+ * story : type = 3
  * 
  * 
  *
 */
 
 #include <QString>
+
+enum{
+  tNull = 0,
+  tError = 1,
+  tClick = 2,
+  tStory = 3
+};
 
 class LogItem {
 public:
@@ -34,15 +41,24 @@ public:
     inline static const LogItem Null() {LogItem item; return item;}
     inline static const LogItem FromString(QString string) {LogItem item; if(item.fromString(string)){return item;}else{return LogItem::Null();}}
     
+    //marked with * need to be appended to when new log type added then also add return function and set function
+    //string handeling
+    bool fromString(QString string); //*
+    QString toString() const;        //*
+    
+    // error type implement
     void setTypeError(QString description = QString("Unknown"));
     void setTypeError(char *string);
+    QString asLogError() const;
+    
+    //click type implement
     void setTypeClick(int x, int y);
-    bool fromString(QString string);
+    int *asLogClick() const;
+    
+    void setTypeStory(int eventType);
+    int asStoryType() const;
     
     int returnType();
-    QString toString() const;
-    int *asLogClick() const;
-    QString asLogError() const;
 private:
     int type;
     void delMem();

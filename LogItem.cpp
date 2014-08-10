@@ -8,21 +8,21 @@
 //#define charperInt static_cast<int>(ceil(sizeof(int) / sizeof(char)))
 
 LogItem::LogItem(){
-  type = 0;
+  type = tNull;
 }
 
 LogItem::LogItem(int x, int y){
-  type = 0;
+  type = tNull;
   setTypeClick(x, y);
 }
 
 LogItem::LogItem(QString ErrorString){
-  type = 0;
+  type = tNull;
   setTypeError(ErrorString);
 }
 
 LogItem::LogItem(const LogItem& other){
-  type = 0;
+  type = tNull;
   *this = other;
 }
 
@@ -32,8 +32,8 @@ LogItem& LogItem::operator=(const LogItem& other){
   }
   
   switch(other.type){
-    case 0:
-      type = 0;
+    case tNull:
+      type = tNull;
       break;
     case 1:
       char *chara;
@@ -46,7 +46,7 @@ LogItem& LogItem::operator=(const LogItem& other){
       setTypeClick(inta[0], inta[1]);
       break;
     default:
-      type = 0;
+      type = tNull;
       break;
   }
   return *this;
@@ -64,7 +64,7 @@ void LogItem::setTypeError(QString description){
 
 void LogItem::setTypeError(char *string){
   delMem();
-  type = 1;
+  type = tError;
   
   char *chara = new char[countStr(string)];
   copyStr(string, chara);
@@ -76,7 +76,7 @@ void LogItem::setTypeClick(int x, int y){
   int *d;
   
   delMem();
-  type = 2;
+  type = tClick;
   
   d = new int[1];
   d[0] = x;
@@ -93,12 +93,13 @@ bool LogItem::fromString(QString string){
   bool ok1 = true; bool ok2 = true;
   
   switch (string.left(middle).toInt()){
-    case 0:
+    case tNull:
+      type = tNull;
       break;
-    case 1:
+    case tError:
       setTypeError(string.mid(middle + 1, string.count()));
       break;
-    case 2:
+    case tClick:
       int first; int x; int y;
       string.remove(0, middle + 1);
       first = string.indexOf(']');
@@ -114,6 +115,14 @@ bool LogItem::fromString(QString string){
         setTypeClick(x, y);
       }
       break;
+    case tStory:
+      int val;
+      
+      val = string.mid(middle + 1, string.count()).toInt(&ok1);
+      
+      if (ok1){
+        setTypeStory(val);
+      }	
     default:
       return false;
   }
@@ -124,19 +133,23 @@ bool LogItem::fromString(QString string){
 QString LogItem::toString() const{
   QString str;
   switch (type){
-    case 0:
-      return " > "; //return a null value
+    case tNull:
+      return "0> "; //return a null value
       break;
-    case 1: //if type error
+    case tError: //if type error
       char *chara;
       chara = (char *) data;
       str = QString("%1>%2").arg(type).arg(QString::fromLocal8Bit(chara));
       break;
-    case 2: //if type click
+    case tClick: //if type click
       int *xy;
       xy = (int *) data;
       str = QString("%1>[%2][%3]").arg(type).arg(xy[0]).arg(xy[1]);
       break;
+    case tStory:
+      int *val;
+      val = (int *) data;
+      str = QString("%1>%2").arg(type).arg(*val);
     default:
       //emit error("Unidentified type in logitem.")
       return QString::null;
@@ -152,6 +165,26 @@ int *LogItem::asLogClick() const{
   return inta;
 }
 
+int LogItem::asStoryType() const{
+  int *i;
+  
+  i = (int *) data;
+  
+  return *i;
+}
+
+void LogItem::setTypeStory(int eventType){
+  int *d;
+  
+  delMem();
+  type = tStory;
+  
+  d = new int;
+  d = &eventType;
+  data = d;
+}
+
+
 QString LogItem::asLogError() const{
   char * chara;
   
@@ -165,22 +198,22 @@ void LogItem::delMem(){
     return;
   }else{
     switch(type){
-      case 0:
+      case tNull:
         break;
-      case 1:
+      case tError:
         char *chara;
         chara = (char*) data;
         delete[] chara;
-        type = 0;
+        type = tNull;
         break;
-      case 2:
+      case tClick:
         int *inta;
         inta = (int *) data;
         delete[] inta;
-        type = 0;
+        type = tNull;
         break;
       default:
-        type = 0;
+        type = tNull;
         break;
     }
   }  
